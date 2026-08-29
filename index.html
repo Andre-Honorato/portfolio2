@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>André Honorato · Desenvolvedor Full-Stack</title>
+    <meta
+      name="description"
+      content="Portfólio de André Honorato, desenvolvedor full-stack focado em back-end (Node.js, NestJS, Prisma, PostgreSQL) e infraestrutura self-hosted."
+    />
+    <meta name="theme-color" content="#0a0a10" />
+    <link rel="shortcut icon" href="./icon/favicon.png" type="image/png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-display: "JetBrains Mono", ui-monospace, monospace;
+        --font-body: "Plus Jakarta Sans", sans-serif;
+        --color-bg: #0a0a10;
+        --color-surface: #131318;
+        --color-surface-2: #1a1a22;
+        --color-line: #26262f;
+        --color-ink: #f2f1ee;
+        --color-muted: #98979f;
+        --color-blue: #3b82f6;
+        --color-green: #34d399;
+      }
+    </style>
+
+    <style>
+      body {
+        font-family: var(--font-body);
+      }
+
+      /* ---------- decorative motion ---------- */
+      @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      .marquee-track {
+        animation: marquee 32s linear infinite;
+      }
+      .marquee-group:hover .marquee-track {
+        animation-play-state: paused;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .float { animation: float 6s ease-in-out infinite; }
+      .float-slow { animation: float 7.5s ease-in-out infinite; animation-delay: -2s; }
+      .float-slower { animation: float 8.5s ease-in-out infinite; animation-delay: -4.5s; }
+
+      @keyframes spin-slow {
+        to { transform: rotate(360deg); }
+      }
+      .animate-spin-slow { animation: spin-slow 10s linear infinite; }
+
+      @keyframes blink {
+        50% { opacity: 0; }
+      }
+      .cursor-blink { animation: blink 1s step-end infinite; }
+
+      @keyframes pulse-dot {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, .55); }
+        70% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+      }
+      .pulse-dot { animation: pulse-dot 2.2s ease-out infinite; }
+
+      /* ---------- accessibility ---------- */
+      a:focus-visible,
+      button:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 2px solid #8b5cf6;
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track, .float, .float-slow, .float-slower,
+        .animate-spin-slow, .cursor-blink, .pulse-dot {
+          animation: none !important;
+        }
+      }
+
+      /* ---------- terminal / fastfetch card (Catppuccin Mocha) ---------- */
+      .cc-terminal {
+        --cc-base: #1e1e2e;
+        --cc-surface0: #313244;
+        --cc-text: #cdd6f4;
+        --cc-subtext: #a6adc8;
+        --cc-mauve: #cba6f7;
+        --cc-red: #f38ba8;
+        --cc-peach: #fab387;
+        --cc-yellow: #f9e2af;
+        --cc-green: #a6e3a1;
+        --cc-teal: #94e2d5;
+        --cc-blue: #89b4fa;
+        --cc-lavender: #b4befe;
+        background: var(--cc-base);
+        color: var(--cc-text);
+      }
+    </style>
+  </head>
+
+  <body class="bg-bg text-ink antialiased selection:bg-[#8b5cf6]/40">
+    <!-- ============ HEADER ============ -->
+    <header
+      id="topo"
+      class="sticky top-0 z-50 bg-bg/80 backdrop-blur border-b border-line"
+    >
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+        <a href="#inicio" class="font-display font-semibold tracking-tight text-ink">
+          André Honorato<span class="text-[#8b5cf6] cursor-blink">_</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 font-display text-sm text-muted">
+          <a href="#inicio" class="hover:text-ink transition-colors">início</a>
+          <a href="#stack" class="hover:text-ink transition-colors">stack</a>
+          <a href="#projetos" class="hover:text-ink transition-colors">projetos</a>
+          <a href="#experiencia" class="hover:text-ink transition-colors">experiência</a>
+          <a href="#contato" class="hover:text-ink transition-colors">contato</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="window.open('https://drive.google.com/uc?export=download&id=17nQwx0N_n-p0_adKE8w_wRmN4shYdIkc', '_blank')"
+            class="hidden sm:inline-flex font-display text-xs uppercase tracking-wide bg-surface-2 border border-line hover:border-[#8b5cf6]/60 text-ink rounded-full px-4 py-2 transition-colors"
+          >
+            currículo
+          </button>
+          <button
+            id="menuBtn"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+            class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-lg border border-line"
+          >
+            <span class="w-4 h-px bg-ink"></span>
+            <span class="w-4 h-px bg-ink"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- mobile nav -->
+      <nav
+        id="mobileNav"
+        class="md:hidden hidden flex-col gap-1 px-6 pb-5 font-display text-sm text-muted border-t border-line"
+      >
+        <a href="#inicio" class="py-2">início</a>
+        <a href="#stack" class="py-2">stack</a>
+        <a href="#projetos" class="py-2">projetos</a>
+        <a href="#experiencia" class="py-2">experiência</a>
+        <a href="#contato" class="py-2">contato</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ============ HERO ============ -->
+      <section id="inicio" class="max-w-6xl mx-auto px-6 lg:px-10 pt-16 pb-24 lg:pt-24 lg:pb-32">
+        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-start">
+          <!-- left -->
+          <div class="hero-item max-w-xl">
+            <p class="font-display text-sm text-blue tracking-wide mb-5">$ whoami</p>
+
+            <h1 class="font-display font-extrabold text-4xl sm:text-5xl leading-[1.15] text-ink">
+              Transformo ideias em
+              <br />
+              <span class="bg-gradient-to-br from-[#ff8a5c] to-[#8b5cf6] bg-clip-text text-transparent">
+                sistemas que ficam no ar.
+              </span>
+            </h1>
+
+            <p class="font-display text-base sm:text-lg text-muted mt-5 min-h-[28px]">
+              <span class="text-[#8b5cf6]">&gt;</span> <span id="typedRole"></span>
+            </p>
+
+            <p class="text-muted leading-relaxed mt-6">
+              Sou desenvolvedor full-stack no 6º semestre de Sistemas de Informação no
+              <strong class="text-ink font-medium">IFSP de Birigui</strong>. Atualmente atuo como PJ na
+              <strong class="text-ink font-medium">Empy</strong>, focado em back-end (Node.js, NestJS,
+              Prisma e PostgreSQL), mas também assino interfaces em React quando o projeto pede. Nas
+              horas vagas, gosto de colocar tudo pra rodar sozinho: VPS, Docker e Coolify.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 mt-9">
+              <button
+                onclick="window.open('https://www.linkedin.com/in/andrehonoratobri/', '_blank')"
+                class="bg-ink text-bg rounded-full cursor-pointer py-3 px-6 font-semibold hover:opacity-90 transition-opacity"
+              >
+                Entrar em contato
+              </button>
+              <button
+                onclick="window.open('https://drive.google.com/uc?export=download&id=17nQwx0N_n-p0_adKE8w_wRmN4shYdIkc', '_blank')"
+                class="text-ink rounded-full cursor-pointer py-3 px-6 font-semibold border border-line hover:border-[#8b5cf6]/60 transition-colors"
+              >
+                Baixar currículo
+              </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2.5 mt-8">
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3.5 py-1.5">
+                🎓 TSI · IFSP Birigui · 6º semestre
+              </span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3.5 py-1.5">
+                💼 PJ @ Empy
+              </span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3.5 py-1.5">
+                📍 Birigui, SP
+              </span>
+            </div>
+          </div>
+
+          <!-- right -->
+          <div class="hero-item flex flex-col items-center gap-10">
+            <div class="relative w-60 h-60 sm:w-72 sm:h-72">
+              <div
+                class="absolute inset-0 rounded-full animate-spin-slow"
+                style="background: conic-gradient(from 0deg, #ff8a5c, #8b5cf6, #3b82f6, #ff8a5c);"
+              ></div>
+              <div class="absolute inset-[5px] rounded-full bg-bg"></div>
+              <img
+                src="./img/avatar.jpg"
+                alt="Foto de André Honorato"
+                class="absolute inset-[10px] w-[calc(100%-20px)] h-[calc(100%-20px)] rounded-full object-cover"
+              />
+
+              <div class="float absolute -right-2 top-4 w-12 h-12 rounded-full bg-surface-2 border border-line shadow-lg shadow-black/40 flex items-center justify-center">
+                <img src="./icon/typeScript.svg" class="w-6 h-6" alt="TypeScript" />
+              </div>
+              <div class="float-slow absolute -left-4 top-1/2 w-12 h-12 rounded-full bg-surface-2 border border-line shadow-lg shadow-black/40 flex items-center justify-center">
+                <img src="./icon/react.svg" class="w-6 h-6" alt="React" />
+              </div>
+              <div class="float-slower absolute right-4 -bottom-3 w-12 h-12 rounded-full bg-surface-2 border border-line shadow-lg shadow-black/40 flex items-center justify-center">
+                <img src="./icon/node.js.svg" class="w-6 h-6" alt="Node.js" />
+              </div>
+            </div>
+
+            <!-- fastfetch-style card -->
+            <div id="fastfetch" class="cc-terminal w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl shadow-black/50 border border-[#313244]">
+              <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color: var(--cc-surface0);">
+                <span class="w-3 h-3 rounded-full" style="background: var(--cc-red);"></span>
+                <span class="w-3 h-3 rounded-full" style="background: var(--cc-yellow);"></span>
+                <span class="w-3 h-3 rounded-full" style="background: var(--cc-green);"></span>
+                <span class="ml-2 font-display text-xs" style="color: var(--cc-subtext);">andre@birigui · zsh</span>
+              </div>
+
+              <div class="p-5 flex gap-4">
+                <img
+                  src="./img/avatar.jpg"
+                  alt="Miniatura de André"
+                  class="w-11 h-11 rounded-lg object-cover shrink-0 ring-2"
+                  style="--tw-ring-color: var(--cc-mauve);"
+                />
+                <dl class="font-display text-[11px] sm:text-xs leading-6 flex-1">
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">OS</dt>
+                    <dd style="color: var(--cc-text);">Linux Mint (dual-boot)</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Terminal</dt>
+                    <dd style="color: var(--cc-text);">kitty + zsh + starship</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Editor</dt>
+                    <dd style="color: var(--cc-text);">VS Code / Cursor</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Stack</dt>
+                    <dd style="color: var(--cc-text);">Node · NestJS · TS · Prisma</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Front</dt>
+                    <dd style="color: var(--cc-text);">React · React Native</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Infra</dt>
+                    <dd style="color: var(--cc-text);">Oracle Cloud · Coolify · Docker</dd>
+                  </div>
+                  <div class="ff-line flex gap-2">
+                    <dt style="color: var(--cc-mauve);" class="w-16 shrink-0">Status</dt>
+                    <dd style="color: var(--cc-green);">construindo algo novo</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="ff-line flex gap-1.5 px-5 pb-5">
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-rosewater, #f5e0dc);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-mauve);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-red);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-peach);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-yellow);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-green);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-teal);"></span>
+                <span class="w-4 h-4 rounded-sm" style="background: var(--cc-blue);"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STACK MARQUEE ============ -->
+      <section id="stack" class="reveal border-y border-line bg-surface/40 py-10">
+        <p class="text-center font-display text-xs uppercase tracking-[0.3em] text-muted mb-8">
+          Experiência com
+        </p>
+        <div class="marquee-group overflow-hidden">
+          <div class="marquee-track flex w-max gap-4">
+            <div class="flex gap-4 pr-4" id="stackList"></div>
+            <div class="flex gap-4 pr-4" id="stackListClone" aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PROJETOS ============ -->
+      <section id="projetos" class="max-w-6xl mx-auto px-6 lg:px-10 pt-28 -mt-16 pb-8">
+        <h2
+          class="reveal font-display text-3xl sm:text-4xl uppercase font-extrabold mb-4 bg-gradient-to-br from-[#ff8a5c] to-[#d5491d] bg-clip-text text-transparent"
+        >
+          Projetos
+        </h2>
+        <p class="reveal text-muted max-w-2xl mb-14">
+          Da sala de aula à produção: do MVP em TypeScript aos primeiros protótipos de front-end.
+        </p>
+
+        <!-- featured: Food Share -->
+        <div class="reveal group grid lg:grid-cols-2 gap-10 items-center bg-surface border border-line rounded-3xl p-6 sm:p-10 mb-14">
+          <div class="rounded-2xl overflow-hidden border border-line shadow-2xl shadow-blue/10">
+            <div class="flex items-center gap-2 px-4 py-3 bg-surface-2 border-b border-line">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#f38ba8]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#f9e2af]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#a6e3a1]"></span>
+              <span class="ml-2 font-display text-[11px] text-muted bg-bg/60 border border-line rounded-full px-3 py-1">
+                foodshare.com.br
+              </span>
+            </div>
+            <img
+              src="./img/foodshare-lp.jpg"
+              alt="Captura de tela da landing page do Food Share"
+              class="w-full h-auto object-cover group-hover:scale-[1.03] transition duration-700"
+            />
+          </div>
+
+          <div>
+            <span class="font-display text-xs uppercase tracking-wide bg-blue/10 text-blue border border-blue/30 rounded-full px-3 py-1">
+              TCC · em produção
+            </span>
+            <h3 class="font-display text-2xl sm:text-3xl font-bold text-ink mt-4 mb-3">Food Share</h3>
+            <p class="text-muted leading-relaxed">
+              Plataforma que conecta estabelecimentos com excedente de alimentos a entidades
+              beneficentes (ONGs, abrigos e igrejas) em cidades de pequeno e médio porte. É meu
+              TCC no IFSP, desenvolvido em dupla: fico responsável pelo back-end e por manter toda a
+              infraestrutura no ar.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-5">
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">React</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">NestJS</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">Prisma</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">PostgreSQL</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">MinIO</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">Docker</span>
+              <span class="font-display text-xs text-muted bg-surface-2 border border-line rounded-full px-3 py-1">Coolify</span>
+            </div>
+
+            <p class="font-display text-xs text-muted mt-5">
+              landing page indexada no Google · monitorada 24/7 com Gatus · deploy automático via Coolify
+            </p>
+
+            <div class="flex flex-wrap gap-4 mt-7">
+              <a
+                href="https://foodshare.com.br"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 bg-gradient-to-br from-[#ff8a5c] to-[#8b5cf6] text-white font-semibold rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity"
+              >
+                Visitar foodshare.com.br ↗
+              </a>
+              <a
+                href="https://github.com/TCC-Food-Share/landing-page"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 text-ink font-semibold rounded-full px-5 py-2.5 border border-line hover:border-[#8b5cf6]/60 transition-colors"
+              >
+                Ver landing page no GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- other projects -->
+        <div class="grid sm:grid-cols-2 gap-6">
+          <a href="https://github.com/Andre-Honorato/Lista-Filmes" target="_blank" rel="noopener" class="reveal group rounded-2xl overflow-hidden border border-line bg-surface">
+            <div class="h-52 overflow-hidden">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                src="https://github.com/user-attachments/assets/0f4da703-3896-46c7-815a-201d48b6dd35"
+                alt="Prévia do projeto Lista Filmes"
+              />
+            </div>
+            <div class="bg-surface-2 p-5 flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <p class="font-display text-[11px] text-muted uppercase tracking-wide">Clique para conhecer</p>
+                <p class="font-display font-bold text-ink">Lista Filmes</p>
+              </div>
+              <img src="./icon/view.svg" alt="Ícone para ver o projeto" />
+            </div>
+          </a>
+
+          <a href="https://github.com/Andre-Honorato/css-terminal" target="_blank" rel="noopener" class="reveal group rounded-2xl overflow-hidden border border-line bg-surface">
+            <div class="h-52 overflow-hidden">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                src="https://image.prntscr.com/image/ATTUFEkrSwi_eK0bRAv9jA.png"
+                alt="Prévia do projeto CSS Terminal"
+              />
+            </div>
+            <div class="bg-surface-2 p-5 flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <p class="font-display text-[11px] text-muted uppercase tracking-wide">Clique para conhecer</p>
+                <p class="font-display font-bold text-ink">CSS Terminal</p>
+              </div>
+              <img src="./icon/view.svg" alt="Ícone para ver o projeto" />
+            </div>
+          </a>
+
+          <a href="https://github.com/Andre-Honorato/Rick-Morty-API-Vue-JS" target="_blank" rel="noopener" class="reveal group rounded-2xl overflow-hidden border border-line bg-surface">
+            <div class="h-52 overflow-hidden">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                src="https://github.com/user-attachments/assets/0d016e8a-76da-4d45-b18e-c10b830144c3"
+                alt="Prévia do projeto Rick Morty API"
+              />
+            </div>
+            <div class="bg-surface-2 p-5 flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <p class="font-display text-[11px] text-muted uppercase tracking-wide">Clique para conhecer</p>
+                <p class="font-display font-bold text-ink">Rick Morty API</p>
+              </div>
+              <img src="./icon/view.svg" alt="Ícone para ver o projeto" />
+            </div>
+          </a>
+
+          <div class="reveal group rounded-2xl overflow-hidden border border-line bg-surface">
+            <div class="h-52 flex items-center justify-center bg-gradient-to-br from-[#1a2744] to-[#0a0a10]">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                src="./img/foodcontrol.png"
+                alt="Prévia do projeto FoodControl"
+              />
+            </div>
+            <div class="bg-surface-2 p-5 flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <p class="font-display text-[11px] text-muted uppercase tracking-wide">Finalizado</p>
+                <p class="font-display font-bold text-ink">FoodControl</p>
+              </div>
+              <span class="font-display text-[11px] text-muted">React Native</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXPERIÊNCIA ============ -->
+      <section id="experiencia" class="max-w-6xl mx-auto px-6 lg:px-10 pt-28 -mt-16 pb-28">
+        <h2
+          class="reveal font-display text-3xl sm:text-4xl uppercase font-extrabold mb-14 bg-gradient-to-br from-[#5BADFF] to-[#1373D1] bg-clip-text text-transparent"
+        >
+          Experiência
+        </h2>
+
+        <div class="max-w-3xl">
+          <div class="reveal exp-row grid grid-cols-[24px_1fr] gap-x-6">
+            <div class="relative flex justify-center">
+              <div class="absolute inset-y-0 w-px bg-line"></div>
+              <span class="pulse-dot relative z-10 mt-1.5 w-3.5 h-3.5 rounded-full bg-green ring-4 ring-green/20"></span>
+            </div>
+            <div class="pb-14">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <img class="w-9 h-9 rounded-lg" src="./img/empy_logo.jpg" alt="Logo da Empy" />
+                  <span class="font-display font-bold text-lg text-ink">Desenvolvedor Full-Stack (PJ)</span>
+                </div>
+                <span class="font-display text-xs text-muted">Nov 2024 · presente</span>
+              </div>
+              <p class="text-muted leading-relaxed">
+                Atuo na Empy focado em back-end (Node.js, NestJS, TypeScript, PostgreSQL e Prisma),
+                construindo APIs escaláveis, integrações de pagamento com a Asaas (PIX, assinaturas,
+                antecipação de recebíveis) e upload de arquivos via AWS S3. No front-end, interfaces
+                em React, Tailwind e TypeScript. Também participo de code reviews, criação de
+                ambientes e do fluxo de releases.
+              </p>
+            </div>
+          </div>
+
+          <div class="reveal exp-row grid grid-cols-[24px_1fr] gap-x-6">
+            <div class="relative flex justify-center">
+              <div class="absolute inset-y-0 w-px bg-line"></div>
+              <span class="relative z-10 mt-1.5 w-3.5 h-3.5 rounded-full bg-line ring-4 ring-line/40"></span>
+            </div>
+            <div class="pb-14">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <img class="w-9 h-9 rounded-lg" src="./img/port_louis_logo.jpg" alt="Logo da Port Louis" />
+                  <span class="font-display font-bold text-lg text-ink">Desenvolvedor Full-Stack Pleno</span>
+                </div>
+                <span class="font-display text-xs text-muted">Abr 2022 · Out 2024</span>
+              </div>
+              <p class="text-muted leading-relaxed">
+                Atuei principalmente com Vue.js e suas tecnologias derivadas, como Vuetify, Vuex e Vue
+                Router. Além das atividades no front-end, comecei a criar novos endpoints em uma API
+                em Node.js e TypeScript, e a escrever consultas para bancos MySQL e PostgreSQL. O
+                diferencial foi a criação de Lambdas e Cronjobs com serviços AWS, mantendo toda a
+                estrutura baseada em Node.js. Também fui responsável pela revisão de Pull Requests e
+                pela padronização do código do projeto.
+              </p>
+            </div>
+          </div>
+
+          <div class="reveal exp-row grid grid-cols-[24px_1fr] gap-x-6">
+            <div class="relative flex justify-center">
+              <span class="relative z-10 mt-1.5 w-3.5 h-3.5 rounded-full bg-line ring-4 ring-line/40"></span>
+            </div>
+            <div>
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <img class="w-9 h-9 rounded-lg" src="./img/softlinebr_logo.jpg" alt="Logo da Softline" />
+                  <span class="font-display font-bold text-lg text-ink">Estagiário de TI</span>
+                </div>
+                <span class="font-display text-xs text-muted">Ago 2021 · Nov 2021</span>
+              </div>
+              <p class="text-muted leading-relaxed">
+                Desenvolvimento de sistemas Web e apps Android/iOS. Manutenção em banco de dados SQL
+                Server e programação orientada a objetos utilizando C# e .NET.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ FOOTER / CONTATO ============ -->
+    <footer id="contato" class="border-t border-line bg-surface">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-14">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-ink mb-2">Contato</h2>
+            <p class="text-muted max-w-sm">Aberto a conversar sobre novos projetos e oportunidades.</p>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <a href="mailto:andre.honorato.bri@gmail.com" class="flex items-center gap-2 text-ink hover:text-blue transition-colors">
+              <img src="./icon/email.svg" alt="" class="w-4 h-4" />
+              <span class="font-display text-sm">andre.honorato.bri@gmail.com</span>
+            </a>
+            <a href="tel:+5518997599021" class="flex items-center gap-2 text-ink hover:text-blue transition-colors">
+              <img src="./icon/phone.svg" alt="" class="w-4 h-4" />
+              <span class="font-display text-sm">(18) 99759-9021</span>
+            </a>
+            <div class="flex items-center gap-4 mt-1">
+              <a href="https://www.linkedin.com/in/andrehonoratobri/" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-surface-2 border border-line flex items-center justify-center hover:border-[#8b5cf6]/60 transition-colors">
+                <svg viewBox="0 0 24 24" class="w-4 h-4 fill-ink"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+              </a>
+              <a href="https://github.com/Andre-Honorato" target="_blank" rel="noopener" aria-label="GitHub" class="w-9 h-9 rounded-full bg-surface-2 border border-line flex items-center justify-center hover:border-[#8b5cf6]/60 transition-colors">
+                <svg viewBox="0 0 24 24" class="w-4 h-4 fill-ink"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.333-1.754-1.333-1.754-1.089-.744.083-.729.083-.729 1.205.084 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.5 11.5 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.804 5.624-5.475 5.921.43.372.823 1.103.823 2.222 0 1.604-.014 2.896-.014 3.286 0 .32.216.694.825.576C20.565 21.795 24 17.298 24 12c0-6.63-5.373-12-12-12z"/></svg>
+              </a>
+              <a href="https://andrehonorato.com.br" target="_blank" rel="noopener" class="font-display text-xs text-muted hover:text-ink transition-colors">
+                andrehonorato.com.br
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <p class="font-display text-xs text-muted mt-12 pt-6 border-t border-line">
+          © <span id="year"></span> André Honorato
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // mobile nav toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      menuBtn.addEventListener('click', () => {
+        const isHidden = mobileNav.classList.toggle('hidden');
+        mobileNav.classList.toggle('flex', !isHidden);
+        menuBtn.setAttribute('aria-expanded', String(!isHidden));
+      });
+      mobileNav.querySelectorAll('a').forEach((a) =>
+        a.addEventListener('click', () => {
+          mobileNav.classList.add('hidden');
+          mobileNav.classList.remove('flex');
+          menuBtn.setAttribute('aria-expanded', 'false');
+        })
+      );
+
+      // tech stack marquee content
+      const stack = [
+        { icon: './icon/react.svg', label: 'React' },
+        { icon: 'https://cdn.simpleicons.org/expo/ffffff', label: 'React Native', fallback: true },
+        { icon: './icon/node.js.svg', label: 'Node.js' },
+        { icon: 'https://cdn.simpleicons.org/nestjs', label: 'NestJS', fallback: true },
+        { icon: './icon/typeScript.svg', label: 'TypeScript' },
+        { icon: './icon/postgresSQL.svg', label: 'PostgreSQL' },
+        { icon: 'https://cdn.simpleicons.org/prisma/ffffff', label: 'Prisma', fallback: true },
+        { icon: 'https://cdn.simpleicons.org/docker', label: 'Docker', fallback: true },
+        { icon: './icon/awssvg.svg', label: 'AWS', chip: true },
+      ];
+
+      function renderStack(container) {
+        stack.forEach((item) => {
+          const el = document.createElement('div');
+          el.className =
+            'flex items-center gap-3 bg-surface-2 border border-line rounded-2xl px-5 py-3 shrink-0 hover:border-[#8b5cf6]/60 transition-colors group';
+          const imgWrap = item.chip
+            ? 'bg-white/90 rounded-md p-1 flex items-center justify-center'
+            : '';
+          el.innerHTML = `
+            <span class="${imgWrap}">
+              <img src="${item.icon}" alt="${item.label}" class="w-7 h-7 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition duration-300" ${
+            item.fallback ? `onerror="this.closest('div').parentElement.style.display='none'"` : ''
+          } />
+            </span>
+            <span class="font-display text-xs uppercase tracking-wide text-muted">${item.label}</span>
+          `;
+          container.appendChild(el);
+        });
+      }
+      renderStack(document.getElementById('stackList'));
+      renderStack(document.getElementById('stackListClone'));
+
+      // rotating tagline
+      if (window.Typed) {
+        new Typed('#typedRole', {
+          strings: [
+            'back-end com NestJS, Prisma &amp; PostgreSQL',
+            'APIs de pagamento com Asaas &amp; PIX',
+            'interfaces com React &amp; React Native',
+            'infra self-hosted rodando 24/7',
+          ],
+          typeSpeed: 32,
+          backSpeed: 18,
+          backDelay: 1800,
+          loop: true,
+        });
+      }
+
+      // motion (GSAP)
+      if (window.gsap) {
+        gsap.registerPlugin(ScrollTrigger);
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!reduceMotion) {
+          // hero load-in
+          gsap.from('.hero-item', {
+            y: 24,
+            opacity: 0,
+            duration: 0.9,
+            ease: 'power2.out',
+            stagger: 0.15,
+          });
+          gsap.from('#fastfetch .ff-line', {
+            x: -12,
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power1.out',
+            stagger: 0.08,
+            delay: 0.5,
+          });
+
+          // scroll reveals
+          gsap.utils.toArray('.reveal').forEach((el) => {
+            gsap.from(el, {
+              y: 28,
+              opacity: 0,
+              duration: 0.7,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 88%',
+              },
+            });
+          });
+
+          gsap.utils.toArray('.exp-row').forEach((el) => {
+            gsap.from(el, {
+              x: -16,
+              opacity: 0,
+              duration: 0.6,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 85%',
+              },
+            });
+          });
+        } else {
+          gsap.set('.hero-item, .reveal, .exp-row, #fastfetch .ff-line', { clearProps: 'all' });
+        }
+      }
+    </script>
+  </body>
+</html>
